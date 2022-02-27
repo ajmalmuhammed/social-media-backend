@@ -1,17 +1,27 @@
-require('./config/db')
-const express = require("express");
-const { default: mongoose } = require("mongoose");
+
+import express from 'express';
+
+import db from './config/db.js';
+import dotenv from "dotenv";
+import authRoutes from './routes/auth.js';
+import bodyParser from "body-parser";
 
 
+
+dotenv.config();
 const app = express();
+const port = process.env.SERVER_PORT || 8089;
+
+
+// middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
+app.use('/api',authRoutes);
 
-app.get("/",(req,res)=>{
-res.send("Helloooooooooooo");
-});
-app.listen(process.env.SERVER_PORT,()=>{
-    console.log("Server has started");
+app.listen(port,()=>{
+    console.log("Server has started on ",port);
 });
 
