@@ -1,5 +1,6 @@
 import { decode } from "../middlewares/crypt.js";
 import OTP from "../models/Otp.js";
+import User from "../models/User.js";
 
 export const verifyOTP = async (req, res) => {
     try {
@@ -33,53 +34,76 @@ export const verifyOTP = async (req, res) => {
         //obj will contain the decoded informations
         var obj = JSON.parse(decoded)
         const email_obj = obj.email
-
+        console.log(obj);
 
         // compare email
         if (email_obj != email) {
-            const response = { "Status": "Failure", "Reason": "Wrong OTP entered. Please try with valid one" }
+            const response = { "Status": "Failure", "Reason": "Use the correct otp associated with this mail" }
             return res.status(400).send(response)
         }
 
         //finding the otp from the db using id
-        const otpFromDB = await OTP.findOne({ where: { id: obj.otp_id } })
+        const otpFromDB = await OTP.findOne({ _id: obj.otp_id } )
         console.log("This" + otpFromDB);
 
+        const userFromDB = await User.findOne({ email: email_obj });
+        console.log("uyserfrom db", userFromDB);
+        //check if user is present in Database
+        if (userFromDB != null) {
 
-        //Check if OTP is present in the Database
-        if (otpFromDB != null) {
+            //Check if OTP is present in the Database
+            if (otpFromDB != null) {
 
-            //Check if OTP is already verified
-            if (otpFromDB.verified != true) {
-                console.log("Check", compareDates(otpFromDB.expiresAt, currentdate));
-                //Check if OTP is expired 
-                if (compareDates(otpFromDB.expiresAt, currentdate) == 1) {
+                //Check if OTP is already verified
+                if (otpFromDB.isVerified != true) {
+                    console.log("expiresat ", otpFromDB.expiresAt, " current", currentdate);
+                    console.log("Check", compareDates(otpFromDB.expiresAt, currentdate));
+                    //Check if OTP is expired 
+                    if (compareDates(otpFromDB.expiresAt, currentdate) == 1) {
 
-                    //comparing both the otps
-                    if (otp === otpFromDB.otp) {
-                        otpFromDB.verified = true
-                        otpFromDB.save()
-                        const response = { "Status": "Success", "Reason": "OTP Matched", "Email": email }
-                        return res.status(200).send(response)
+                        //comparing both the otps
+                        if (otp === otpFromDB.otp) {
+
+                            otpFromDB.isVerified = true;
+                            otpFromDB.save();
+
+                            //if the user is not verified
+                            if (!userFromDB.isVerified) {
+                                userFromDB.isVerified = true;
+                                userFromDB.save();
+
+                                const response = { "Status": "Account verification successfull", "Email": email }
+                                return res.status(200).send(response)
+                            }
+
+
+                            const response = { "Status": "Login Success", "Email": email, 
+                                                 "First name": userFromDB.firstName, "Last name": userFromDB.lastName}
+                            return res.status(200).send(response)
+                        }
+                        else {
+                            const response = { "Status": "Failure", "Reason": "OTP NOT Matched" }
+                            return res.status(400).send(response)
+                        }
+
                     }
                     else {
-                        const response = { "Status": "Failure", "Reason": "OTP NOT Matched" }
+                        const response = { "Status": "Failure", "Reason": "OTP Expired! Please request new OTP" }
                         return res.status(400).send(response)
                     }
-
                 }
                 else {
-                    const response = { "Status": "Failure", "Reason": "OTP Expired! Please request new OTP" }
+                    const response = { "Status": "Failure", "Reason": "OTP already used! Please request new OTP" };
                     return res.status(400).send(response)
                 }
             }
             else {
-                const response = { "Status": "Failure", "Reason": "OTP Already Used" }
+                const response = { "Status": "Failure", "Reason": "Bad Request" }
                 return res.status(400).send(response)
             }
         }
         else {
-            const response = { "Status": "Failure", "Reason": "Bad Request" }
+            const response = { "Status": "Failure", "Reason": "Please signup first" }
             return res.status(400).send(response)
         }
     }

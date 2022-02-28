@@ -42,6 +42,8 @@ export const login = async (req, res) => {
                 //   return res.status(400).send(response) 
                 type = "LOGIN"
             } else {
+                const user = new User({email:req.body.email});
+                user.save();
                 type = "VERIFY"
                 console.log("not found");
                 //code if no user with entered email was found
