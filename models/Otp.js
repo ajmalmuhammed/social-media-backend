@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const OtpSchema = new Schema({
-    id: {
-        type: Number,
-        unique: true
-    },
+
     otp: {
         type: String
     },

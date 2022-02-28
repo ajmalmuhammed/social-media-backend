@@ -65,7 +65,7 @@ export const login = async (req, res) => {
         // Create details object containing the email and otp id
         var details = {
             "timestamp": now,
-            "check": email_id,
+            "email": email_id,
             "success": true,
             "message": "OTP sent to user",
             "otp_id": otp_instance.id
@@ -121,24 +121,25 @@ export const login = async (req, res) => {
         });
 
 
-        const mailOptions = {
-            from: `"no-reply-@SocialMedia"<${process.env.EMAIL_ID}>`,
-            to: `${email_id}`,
-            subject: email_subject,
-            text: email_message,
-        };
+        // const mailOptions = {
+        //     from: `"no-reply-@SocialMedia"<${process.env.EMAIL_ID}>`,
+        //     to: `${email_id}`,
+        //     subject: email_subject,
+        //     text: email_message,
+        // };
 
-        await transporter.verify();
+        // await transporter.verify();
 
-        //Send Email
-        await transporter.sendMail(mailOptions, (err, response) => {
-            if (err) {
-                return res.status(400).send({ "Status": "Failure", "Reason": err });
-            } else {
-                console.log('res: ', response);
-                return res.send({ "Status": "Success", "Reason": encoded });
-            }
-        });
+        // //Send Email
+        // await transporter.sendMail(mailOptions, (err, response) => {
+        //     if (err) {
+        //         return res.status(400).send({ "Status": "Failure", "Reason": err });
+        //     } else {
+        //         console.log('res: ', response);
+        //         return res.send({ "Status": "Success", "Reason": encoded });
+        //     }
+        // });'
+        return res.send({ "Status": "Success", "Reason": encoded });
     }
 
     catch (err) {
