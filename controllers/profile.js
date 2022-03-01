@@ -1,8 +1,6 @@
-
-import db from "../config/db.js";
 import { decode } from "../middlewares/crypt.js";
 import User from "../models/User.js";
-
+import jwt from "jsonwebtoken";
 
 export const addProfileDetails = async (req, res) => {
 
@@ -29,6 +27,19 @@ export const addProfileDetails = async (req, res) => {
                 userInstance.firstName = firstName;
                 userInstance.lastName = lastName;
                 userInstance.save();
+
+                //creating a jwt cookie
+                const token = jwt.sign({ firstName, lastName, email_id }, process.env.JWT_SECRET, {
+                    expiresIn: '25 days',
+                  });
+              
+                  res.cookie('token', token, {
+                    httpOnly: true,
+                    maxAge: 2160000000,
+                    secure: process.env.ENV == 'production' ? true : false,
+                  });
+                
+
                 const response={"Status":"Success", "Details":"Profile details updated"}
                 return res.status(200).send(response);
             }

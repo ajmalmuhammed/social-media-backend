@@ -122,6 +122,7 @@ export const login = async (req, res) => {
             }
         });
 
+        // mailing disabled for now for testing purpose 
 
         // const mailOptions = {
         //     from: `"no-reply-@SocialMedia"<${process.env.EMAIL_ID}>`,
@@ -141,7 +142,7 @@ export const login = async (req, res) => {
         //         return res.send({ "Status": "Success", "Reason": encoded });
         //     }
         // });'
-        return res.send({ "Status": "Success", "Reason": encoded });
+        return res.send({ "Status": "Success", "key": encoded });
     }
 
     catch (err) {
