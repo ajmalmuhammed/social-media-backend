@@ -1,7 +1,10 @@
 
 # Social Media Backend
 
-This is a basic API for a social media website. Here users will be able to login after succesful verification of the OTP sent to the mail.
+This is a basic API for a social media website. Here users will be able to login using an otp sent to his mail.
+
+
+
 
 
 
@@ -25,6 +28,9 @@ This is a basic API for a social media website. Here users will be able to login
 
     INITIAL_VECTOR = <INITIAL VECTOR REQUIRED FOR AES ENCRYPTION>
     CRYPTO_PASSWORD = <PASSWORD FOR THE ENCRYPTION>
+
+    JWT_SECRET = <SECRET CODE FOR GENERATING JWT>
+    ENV = <WHICH ENV THIS SERVER IS RUNNING EG. PRODUCTION,TEST>
 ```
     
 ## Deployment
@@ -60,18 +66,44 @@ To start the api run
           "email": _same email used for request otp_
         }
     ```
+    A cookie (jwt token) will be set after verification of the otp.
 - To add profile details after verification
-    ` api/verify `  
+    ` api/profile `  
     - Method : `POST`
-    - request
+    - Cookie : _jwt_token_
+    - request:
     ```json
         {
-          "verification_key": _from the request otp request_
            "email_id" : _mailid_
            "firstName": _first name to be updated_
            "lastName": _lastname to be updated_
         }
     ```
+- To add post after succesfull login
+    ` api/post `  
+    - Method : `POST`
+    - Cookie : _jwt_token_
+    - request:
+    ```json
+        {
+            "title" : "this is the title",
+            "content": "this is the content of this post"
+        }
+    ```
+
+- To like a post after succesfull login
+    ` api/like/:id `  
+    - Method : `POST`
+    - Cookie : _jwt_token_
+    - id - the postID present in DB
+    - request:
+    ```json
+        {
+            "user_id" : _USER_ID of current person_
+        }
+
+    ```
+
      
 
 
