@@ -65,7 +65,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"verification_key\" : \"{{verification_key}}\",\r\n    \"otp\": \"443018\",\r\n    \"email\" : \"muhammedajmal54@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"verification_key\" : \"{{verification_key}}\",\r\n    \"otp\": \"587614\",\r\n    \"email\" : \"muhammedajmal54@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -131,20 +131,13 @@
 			"name": "create-post",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt_token}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \r\n    \"title\" : \"this is the title\",\r\n    \"content\": \"this is the content of this post2\"\r\n}\r\n",
+					"raw": "{\r\n    \r\n    \"title\" : \"ajmal1\",\r\n    \"content\": \"first post of india\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -170,14 +163,7 @@
 			"name": "like-post",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt_token}}",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "PUT",
 				"header": [],
@@ -205,8 +191,67 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "621dfbec12f96cd850a86cb1"
+							"value": "621effc4d5f05b29061ccdb1"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-post",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"user_id\" : \"621ce996a9eaf6c00c4bc2cb\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8001/api/delete/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"delete",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "621effc4d5f05b29061ccdb1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8001/api/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"api",
+						"logout"
 					]
 				}
 			},
