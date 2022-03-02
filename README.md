@@ -93,7 +93,7 @@ To start the api run
 
 - To like a post after succesfull login
     ` api/like/:id `  
-    - Method : `POST`
+    - Method : `PUT`
     - Cookie : _jwt_token_
     - id - the postID present in DB
     - request:
@@ -105,6 +105,22 @@ To start the api run
     ```
 
      
+- To delete user's post
+    ` api/delete/:id `  
+    - Method : `DELETE`
+    - Cookie : _jwt_token_
+    - id - the postID present in DB
+    - request:
+    ```json
+        {
+            "user_id" : _USER_ID of current person_
+        }
 
+    ```
 
+- To logout
+    ` api/logout `  
+    - Method : `GET`
+    - Cookie : _jwt_token_
+    - request:
 
