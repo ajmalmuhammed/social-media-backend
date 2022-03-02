@@ -12,10 +12,10 @@ export const isLoggedIn = (req, res, next) => {
     try {
  
         //verify the jwt
-        const user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-        const { firstName, lastName, email_id, user_id } = user;
-        req.user = { firstName, lastName, email_id, user_id };
-        console.log("valid");
+        const user = jwt.verify(req.cookies.token, process.env.JWT_SECRET);  
+        const { email, userid } = user;
+        req.user = { email, userid };
+
     } catch (error) {
         const response = { "Status": "Failure", "Reason": "Bad Request" }
         return res.status(400).send(response)

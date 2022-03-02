@@ -154,6 +154,11 @@ export const login = async (req, res) => {
 
 };
 
+export const logout= async (req,res) =>{
+    res.clearCookie('token');
+    return res.send({ "Status": "Success", "Details": "Logout successful" });
+};
+
 // To add minutes to the current time
 function AddMinutesToDate(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
