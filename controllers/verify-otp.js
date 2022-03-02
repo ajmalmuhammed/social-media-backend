@@ -35,7 +35,6 @@ export const verifyOTP = async (req, res) => {
         //obj will contain the decoded informations
         var obj = JSON.parse(decoded)
         const email_obj = obj.email
-        console.log(obj);
 
         // compare email
         if (email_obj != email) {
@@ -45,10 +44,11 @@ export const verifyOTP = async (req, res) => {
 
         //finding the otp from the db using id
         const otpFromDB = await OTP.findOne({ _id: obj.otp_id })
-        console.log("This" + otpFromDB);
 
+
+        //finding the user from the db using email
         const userFromDB = await User.findOne({ email: email_obj });
-        console.log("uyserfrom db", userFromDB);
+
         //check if user is present in Database
         if (userFromDB != null) {
 
@@ -57,8 +57,7 @@ export const verifyOTP = async (req, res) => {
 
                 //Check if OTP is already verified
                 if (otpFromDB.isVerified != true) {
-                    console.log("expiresat ", otpFromDB.expiresAt, " current", currentdate);
-                    console.log("Check", compareDates(otpFromDB.expiresAt, currentdate));
+
                     //Check if OTP is expired 
                     if (compareDates(otpFromDB.expiresAt, currentdate) == 1) {
 
@@ -134,7 +133,7 @@ export const verifyOTP = async (req, res) => {
 }
 
 
-
+// returns 1 if first date is greater than second
 function compareDates(d1, d2) {
 
     if (d1 > d2)

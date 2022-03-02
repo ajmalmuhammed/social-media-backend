@@ -1,7 +1,5 @@
 
 import express from 'express';
-
-import db from './config/db.js';
 import dotenv from "dotenv";
 import authRoutes from './routes/auth.js';
 import verifyRoutes from './routes/verify-otp.js';

@@ -8,11 +8,11 @@ export const addProfileDetails = async (req, res) => {
 
         const { email_id, firstName, lastName } = req.body;
 
-        
+
 
 
         const userInstance = await User.findOne({ email: email_id });
-        console.log("UserInstance",userInstance);
+        console.log("UserInstance", userInstance);
         //Check if user is present in the Database
         if (userInstance != null) {
             if (userInstance.isVerified == true) {
@@ -20,7 +20,7 @@ export const addProfileDetails = async (req, res) => {
                 userInstance.lastName = lastName;
                 userInstance.save();
 
-                const response={"Status":"Success", "Details":"Profile details updated"}
+                const response = { "Status": "Success", "Details": "Profile details updated" }
                 return res.status(200).send(response);
             }
             else {

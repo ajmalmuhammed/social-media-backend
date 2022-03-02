@@ -5,7 +5,6 @@ export const isLoggedIn = (req, res, next) => {
 
     //throw error if cookie is null
     if (!req.cookies.token) {
-        // console.log(req.headers.cookie);
         const response = { "Status": "Failure", "Reason": "Please login first" }
         return res.status(400).send(response)
     }
