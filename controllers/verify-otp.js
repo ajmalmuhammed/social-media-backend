@@ -1,6 +1,7 @@
 import { decode } from "../middlewares/crypt.js";
 import OTP from "../models/Otp.js";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 export const verifyOTP = async (req, res) => {
     try {
@@ -43,7 +44,7 @@ export const verifyOTP = async (req, res) => {
         }
 
         //finding the otp from the db using id
-        const otpFromDB = await OTP.findOne({ _id: obj.otp_id } )
+        const otpFromDB = await OTP.findOne({ _id: obj.otp_id })
         console.log("This" + otpFromDB);
 
         const userFromDB = await User.findOne({ email: email_obj });
@@ -67,6 +68,21 @@ export const verifyOTP = async (req, res) => {
                             otpFromDB.isVerified = true;
                             otpFromDB.save();
 
+
+                            const userid = userFromDB.id
+                            //creating a jwt cookie
+                            const token = jwt.sign({ email, userid }, process.env.JWT_SECRET, {
+                                expiresIn: '25 days',
+                            });
+
+                            res.cookie('token', token, {
+                                httpOnly: true,
+                                maxAge: 2160000000,
+                                secure: process.env.ENV == 'production' ? true : false,
+                            });
+
+
+
                             //if the user is not verified
                             if (!userFromDB.isVerified) {
                                 userFromDB.isVerified = true;
@@ -77,8 +93,10 @@ export const verifyOTP = async (req, res) => {
                             }
 
 
-                            const response = { "Status": "Login Success", "Email": email, 
-                                                 "First name": userFromDB.firstName, "Last name": userFromDB.lastName}
+                            const response = {
+                                "Status": "Login Success", "Email": email,
+                                "First name": userFromDB.firstName, "Last name": userFromDB.lastName
+                            }
                             return res.status(200).send(response)
                         }
                         else {

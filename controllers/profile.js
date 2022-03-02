@@ -6,17 +6,9 @@ export const addProfileDetails = async (req, res) => {
 
     try {
 
-        const { verification_key, email_id, firstName, lastName } = req.body;
+        const { email_id, firstName, lastName } = req.body;
 
-        let decoded;
-        //Get the decoded verification_key
-        try {
-            decoded = await decode(verification_key)
-        }
-        catch (err) {
-            const response = { "Status": "Failure", "Reason": "Bad Request", err }
-            return res.status(400).send(response)
-        }
+        
 
 
         const userInstance = await User.findOne({ email: email_id });
@@ -28,21 +20,6 @@ export const addProfileDetails = async (req, res) => {
                 userInstance.lastName = lastName;
                 userInstance.save();
 
-                const user_id = userInstance.id;
-           
-
-                //creating a jwt cookie
-                const token = jwt.sign({ firstName, lastName, email_id, user_id}, process.env.JWT_SECRET, {
-                    expiresIn: '25 days',
-                  });
-              
-                  res.cookie('token', token, {
-                    httpOnly: true,
-                    maxAge: 2160000000,
-                    secure: process.env.ENV == 'production' ? true : false,
-                  });
-                
-                  console.log(token);
                 const response={"Status":"Success", "Details":"Profile details updated"}
                 return res.status(200).send(response);
             }
