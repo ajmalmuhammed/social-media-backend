@@ -7,7 +7,7 @@ import profileRoutes from './routes/profile.js';
 import postRoutes from './routes/posts.js';
 import bodyParser from "body-parser";
 import cookieParser from 'cookie-parser';
-
+import db from './config/db.js';
 
 dotenv.config();
 const app = express();
